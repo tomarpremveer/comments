@@ -1,38 +1,98 @@
 .App {
-  text-align: center;
+  width: 600px;
+  margin: 0 auto;
+}
+.formContainer {
+  width: 600px;
+  height: 200px;
+  margin: 0 auto;
+  background-color: rgb(228, 222, 222);
+}
+.formContainerTitle {
+  margin: 10px 0 2px 25px;
+}
+.input {
+  width: 90%;
+  height: 20px;
+  margin: 2px 10px 0 30px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.textarea {
+  width: 90%;
+  height: 40px;
+  margin: 3px 10px 0 30px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.buttonContainer {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: flex-end;
 }
 
-.App-link {
-  color: #61dafb;
+.commentPostButton {
+  margin: 2px 23px 0 0;
+  background-color: rgb(22, 122, 236);
+  width: 50px;
+  font-weight: bold;
+  height: 30px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.commentViewer {
+  width: 600px;
+  margin: 4px auto 0;
+}
+
+.sortbuttonContainer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.commentContainer {
+  margin: 4px 0;
+  background-color: rgb(228, 222, 222);
+}
+.comment {
+  width: 95%;
+  word-wrap: break-word;
+  margin: 3px 2px;
+}
+.commentHeader {
+  margin: 3px;
+  display: flex;
+  justify-content: space-between;
+}
+.main {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+}
+
+.commentButtonContainer {
+  display: flex;
+  justify-content: flex-start;
+  gap: 4%;
+}
+
+.commentButtonContainer > button {
+  margin: 0 0 3px 3px;
+  background-color: darkcyan;
+}
+
+.deleteButton {
+  position: absolute;
+  right: -10px;
+  border-radius: 10px;
+}
+
+.replyContainer {
+  width: 95%;
+  margin: 4px 0 4px 31px;
+  background-color: rgb(228, 222, 222);
+}
+
+.replyformContainer {
+  width: 95%;
+  height: 200px;
+  margin: 4px 0 4px 31px;
+  background-color: rgb(228, 222, 222);
 }

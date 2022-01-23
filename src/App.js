@@ -1,23 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
+import CommentViewer from "./Components/CommentViewer";
+import PostComment from "./Components/PostComment";
+import {
+  submitComment,
+  getComments,
+  getReplies,
+} from "./utils/LocalstorageUtil";
 
 function App() {
+  const [allComments, setComments] = useState([]);
+  const [replies, setReplies] = useState([]);
+  useEffect(() => {
+    setComments(getComments);
+    setReplies(getReplies);
+  }, []);
+
+  const onCommentSubmit = (obj) => {
+    setComments((comments) => comments.concat([obj]));
+    submitComment(obj);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <PostComment onCommentSubmit={onCommentSubmit} />
+      <CommentViewer
+        replies={replies}
+        comments={allComments}
+        setComments={setComments}
+      />
     </div>
   );
 }
