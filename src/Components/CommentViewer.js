@@ -1,6 +1,11 @@
-import { useState } from "react";
-import { ID, sortValues } from "../utils/CommentUtils";
-import { deleteComment, submitReply } from "../utils/LocalstorageUtil";
+import { useState, useEffect } from "react";
+import { ID, sortReplies, sortValues } from "../utils/CommentUtils";
+import {
+  deleteCommentLocalstorage,
+  deleteReplyLocalstorage,
+  getReplies,
+  saveRepliesLocalstorage,
+} from "../utils/LocalstorageUtil";
 import Input from "./Input";
 import TextArea from "./Textarea";
 
@@ -10,10 +15,16 @@ export default function CommentViewer({ comments = [], setComments }) {
   const [sortDirection, setSortDirection] = useState(0);
   const [replyComment, setReplyComment] = useState(null);
   const [replies, setReplies] = useState({});
+
+  useEffect(() => {
+    setReplies(getReplies());
+  }, []);
   const onSortButtonClick = () => {
     const sortedComments = sortValues(comments, sortDirection);
+    const sortedReplies = sortReplies(replies, sortDirection);
     const updateSortOrder = sortDirection === 1 ? 0 : 1;
     setComments(sortedComments);
+    setReplies(sortedReplies);
     setSortDirection(updateSortOrder);
   };
 
@@ -21,7 +32,7 @@ export default function CommentViewer({ comments = [], setComments }) {
     const filteredComments = comments.filter(
       (comment) => comment.id !== commentId
     );
-    deleteComment(commentId); // this is used for deleting comments from localstorage
+    deleteCommentLocalstorage(commentId);
     setComments(filteredComments);
   };
 
@@ -40,7 +51,7 @@ export default function CommentViewer({ comments = [], setComments }) {
       updatedReplies[[commentId]] = [replyObject];
     }
 
-    submitReply(updatedReplies);
+    saveRepliesLocalstorage(updatedReplies);
     setReplies(updatedReplies);
   };
   const onSubmit = (commentId) => {
@@ -52,10 +63,25 @@ export default function CommentViewer({ comments = [], setComments }) {
       dateTime: new Date(),
     };
     addReply(commentId, obj);
+    /*Set values of form field once we submit comment */
     setName("");
     setCommentText("");
     const id = replyComment ? null : commentId;
     setReplyComment(id);
+  };
+  const onReplyDelete = (commentId, replyId) => {
+    const allReplies = { ...replies };
+    const commentReplies = allReplies[commentId];
+    const filteredReplies = commentReplies.filter(
+      (reply) => reply.id !== replyId
+    );
+    if (filteredReplies.length > 0) {
+      allReplies[commentId] = filteredReplies;
+    } else {
+      delete allReplies[commentId];
+    }
+    setReplies(allReplies);
+    deleteReplyLocalstorage(commentId, replyId);
   };
   const arrow = sortDirection === 1 ? 2193 : 2191;
   return (
@@ -97,7 +123,7 @@ export default function CommentViewer({ comments = [], setComments }) {
                     <div className="formContainerTitle">
                       <h4>Reply</h4>
                     </div>
-
+                    {/*Form for adding replies to the comment */}
                     <form
                       onSubmit={(e) => {
                         e.preventDefault();
@@ -124,6 +150,7 @@ export default function CommentViewer({ comments = [], setComments }) {
                     </form>
                   </div>
                 ) : null}
+                {/* rendering replies for the comment */}
                 {replies[[comment.id]] !== undefined
                   ? replies[[comment.id]].map((reply) => (
                       <div key={reply.id}>
@@ -140,7 +167,9 @@ export default function CommentViewer({ comments = [], setComments }) {
                             <p className="comment"> {reply.commentText}</p>
                             <button
                               className="deleteButton"
-                              onClick={() => onCommentDelete(reply.id)}
+                              onClick={() =>
+                                onReplyDelete(comment.id, reply.id)
+                              }
                             >
                               D
                             </button>

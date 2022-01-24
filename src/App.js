@@ -2,18 +2,12 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import CommentViewer from "./Components/CommentViewer";
 import PostComment from "./Components/PostComment";
-import {
-  submitComment,
-  getComments,
-  getReplies,
-} from "./utils/LocalstorageUtil";
+import { submitComment, getComments } from "./utils/LocalstorageUtil";
 
 function App() {
   const [allComments, setComments] = useState([]);
-  const [replies, setReplies] = useState([]);
   useEffect(() => {
-    setComments(getComments);
-    setReplies(getReplies);
+    setComments(getComments());
   }, []);
 
   const onCommentSubmit = (obj) => {
@@ -23,11 +17,7 @@ function App() {
   return (
     <div>
       <PostComment onCommentSubmit={onCommentSubmit} />
-      <CommentViewer
-        replies={replies}
-        comments={allComments}
-        setComments={setComments}
-      />
+      <CommentViewer comments={allComments} setComments={setComments} />
     </div>
   );
 }

@@ -9,7 +9,7 @@ export function submitComment(comment) {
   localStorage.setItem("comments", JSON.stringify(comments));
 }
 
-export function deleteComment(commentId) {
+export function deleteCommentLocalstorage(commentId) {
   const comments = getComments();
   const filteredComments = comments.filter(
     (comment) => comment.id !== commentId
@@ -19,7 +19,7 @@ export function deleteComment(commentId) {
   const replies = getReplies();
   if (replies[commentId] !== undefined) {
     delete replies[commentId];
-    submitReply(replies);
+    saveRepliesLocalstorage(replies);
   }
 }
 
@@ -28,12 +28,20 @@ export function getReplies() {
   return replies;
 }
 
-export function submitReply(replies) {
+export function saveRepliesLocalstorage(replies) {
   localStorage.setItem("replies", JSON.stringify(replies));
 }
 
-export function deleteReply(replyId) {
+export function deleteReplyLocalstorage(commentId, replyId) {
   const replies = getReplies();
-  const filteredReplies = replies.filter((reply) => reply.id !== replyId);
-  localStorage.setItem("comments", JSON.stringify(filteredReplies));
+  const commentReplies = replies[commentId];
+  const filteredReplies = commentReplies.filter(
+    (reply) => reply.id !== replyId
+  );
+  if (filteredReplies.length > 0) {
+    replies[commentId] = filteredReplies;
+  } else {
+    delete replies[commentId];
+  }
+  localStorage.setItem("replies", JSON.stringify(replies));
 }

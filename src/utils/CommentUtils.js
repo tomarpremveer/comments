@@ -7,3 +7,11 @@ export function sortValues(values, sortOrder) {
 export function ID() {
   return Math.random().toString(16).slice(2);
 }
+
+export function sortReplies(replies, sortOrder) {
+  const sortedReplies = {};
+  Object.keys(replies).forEach((key) => {
+    sortedReplies[key] = sortValues(replies[key], sortOrder);
+  });
+  return sortedReplies;
+}
